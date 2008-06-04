@@ -1,0 +1,800 @@
+<ui version="4.0" >
+ <author>Michal Tomlein</author>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>848</width>
+    <height>661</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Weblinguist</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>84</y>
+     <width>848</width>
+     <height>577</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3" >
+    <property name="spacing" >
+     <number>0</number>
+    </property>
+    <property name="margin" >
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QStackedWidget" name="stw_main" >
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="page_welcome" >
+       <property name="geometry" >
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>848</width>
+         <height>577</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3" >
+        <item row="0" column="1" >
+         <spacer name="verticalSpacer_2" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>20</width>
+            <height>53</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" >
+         <spacer name="horizontalSpacer_2" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>159</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1" >
+         <widget class="QFrame" name="frame_welcome" >
+          <property name="minimumSize" >
+           <size>
+            <width>480</width>
+            <height>360</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>520</width>
+            <height>400</height>
+           </size>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3" >
+           <item>
+            <widget class="QLabel" name="lbl_icon" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="pixmap" >
+              <pixmap resource="resources.qrc" >:/images/images/weblinguist128.png</pixmap>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_weblinguist" >
+             <property name="font" >
+              <font>
+               <pointsize>20</pointsize>
+              </font>
+             </property>
+             <property name="text" >
+              <string>Weblinguist</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer" >
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0" >
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_recent_docs" >
+             <property name="text" >
+              <string>Recent documents:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QListWidget" name="lw_recent_docs" />
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="2" >
+         <spacer name="horizontalSpacer_3" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>159</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="1" >
+         <spacer name="verticalSpacer_3" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>20</width>
+            <height>52</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_main" >
+       <property name="geometry" >
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>848</width>
+         <height>555</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout" >
+        <item row="0" column="0" colspan="2" >
+         <widget class="QGroupBox" name="gb_lang" >
+          <property name="title" >
+           <string>Language and encoding</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_4" >
+           <item>
+            <widget class="QLabel" name="lbl_encoding" >
+             <property name="text" >
+              <string>Encoding:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="le_encoding" >
+             <property name="text" >
+              <string>UTF-8</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4" >
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_lang" >
+             <property name="text" >
+              <string>Language:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="cb_lang" />
+           </item>
+           <item>
+            <widget class="QToolButton" name="tbtn_add_lang" >
+             <property name="text" >
+              <string>Add language</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="resources.qrc" >
+               <normaloff>:/images/images/lang_add.png</normaloff>:/images/images/lang_add.png</iconset>
+             </property>
+             <property name="popupMode" >
+              <enum>QToolButton::InstantPopup</enum>
+             </property>
+             <property name="toolButtonStyle" >
+              <enum>Qt::ToolButtonTextBesideIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="tbtn_remove_lang" >
+             <property name="text" >
+              <string>Remove language</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="resources.qrc" >
+               <normaloff>:/images/images/lang_remove.png</normaloff>:/images/images/lang_remove.png</iconset>
+             </property>
+             <property name="popupMode" >
+              <enum>QToolButton::InstantPopup</enum>
+             </property>
+             <property name="toolButtonStyle" >
+              <enum>Qt::ToolButtonTextBesideIcon</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QGroupBox" name="gb_files" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>250</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="title" >
+           <string>Files</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2" >
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout" >
+             <item>
+              <widget class="QLabel" name="lbl_files_search" >
+               <property name="text" >
+                <string>Search:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="ExtendedLineEdit" name="le_files_search" />
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="MTListWidget" name="lw_files" />
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2" >
+             <item>
+              <widget class="QToolButton" name="tbtn_files_add" >
+               <property name="toolButtonStyle" >
+                <enum>Qt::ToolButtonTextBesideIcon</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer" >
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>162</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QToolButton" name="tbtn_files_remove" >
+               <property name="toolButtonStyle" >
+                <enum>Qt::ToolButtonTextBesideIcon</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="1" >
+         <widget class="QSplitter" name="splitter_strings_translation" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QGroupBox" name="gb_strings" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="title" >
+            <string>Strings</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2" >
+            <item row="0" column="0" >
+             <widget class="QLabel" name="lbl_strings_search" >
+              <property name="text" >
+               <string>Search:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" >
+             <widget class="ExtendedLineEdit" name="le_strings_search" />
+            </item>
+            <item row="1" column="0" colspan="2" >
+             <widget class="MTTableWidget" name="tw_strings" >
+              <property name="editTriggers" >
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="alternatingRowColors" >
+               <bool>true</bool>
+              </property>
+              <property name="selectionMode" >
+               <enum>QAbstractItemView::SingleSelection</enum>
+              </property>
+              <column>
+               <property name="text" >
+                <string>Source</string>
+               </property>
+              </column>
+              <column>
+               <property name="text" >
+                <string>Translation</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QGroupBox" name="gb_translation" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="title" >
+            <string>Translation</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout" >
+            <item>
+             <widget class="QLabel" name="lbl_source" >
+              <property name="text" >
+               <string>&lt;b>Source:&lt;/b></string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTextBrowser" name="txb_source" />
+            </item>
+            <item>
+             <widget class="QLabel" name="lbl_translation" >
+              <property name="text" >
+               <string>&lt;b>Translation:&lt;/b></string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPlainTextEdit" name="pte_translation" />
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>848</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Project" >
+    <property name="title" >
+     <string>&amp;Project</string>
+    </property>
+    <addaction name="action_New" />
+    <addaction name="action_Open" />
+    <addaction name="action_Save" />
+    <addaction name="action_Close" />
+    <addaction name="separator" />
+    <addaction name="action_Quit" />
+   </widget>
+   <widget class="QMenu" name="menu_File" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_Add" />
+    <addaction name="action_Remove" />
+    <addaction name="separator" />
+    <addaction name="action_Update_all" />
+    <addaction name="action_Release" />
+   </widget>
+   <widget class="QMenu" name="menu_Translation" >
+    <property name="title" >
+     <string>&amp;Translation</string>
+    </property>
+    <addaction name="action_Previous_unfinished" />
+    <addaction name="action_Next_unfinished" />
+    <addaction name="action_Previous" />
+    <addaction name="action_Next" />
+    <addaction name="action_Done_and_next" />
+   </widget>
+   <widget class="QMenu" name="menu_Language" >
+    <property name="title" >
+     <string>&amp;Language</string>
+    </property>
+    <widget class="QMenu" name="menu_Add_language" >
+     <property name="title" >
+      <string>&amp;Add language</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="resources.qrc" >
+       <normaloff>:/images/images/lang_add.png</normaloff>:/images/images/lang_add.png</iconset>
+     </property>
+     <addaction name="action_Add_other_language" />
+     <addaction name="separator" />
+    </widget>
+    <widget class="QMenu" name="menu_Remove_language" >
+     <property name="title" >
+      <string>&amp;Remove language</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="resources.qrc" >
+       <normaloff>:/images/images/lang_remove.png</normaloff>:/images/images/lang_remove.png</iconset>
+     </property>
+     <addaction name="action_Remove_all_languages" />
+     <addaction name="separator" />
+    </widget>
+    <addaction name="menu_Add_language" />
+    <addaction name="menu_Remove_language" />
+   </widget>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>Help</string>
+    </property>
+    <addaction name="action_Check_for_updates" />
+    <addaction name="separator" />
+    <addaction name="action_About_Weblinguist" />
+   </widget>
+   <addaction name="menu_Project" />
+   <addaction name="menu_File" />
+   <addaction name="menu_Translation" />
+   <addaction name="menu_Language" />
+   <addaction name="menuHelp" />
+  </widget>
+  <widget class="QToolBar" name="tlb_main" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>22</y>
+     <width>297</width>
+     <height>62</height>
+    </rect>
+   </property>
+   <property name="windowTitle" >
+    <string>toolBar</string>
+   </property>
+   <property name="toolButtonStyle" >
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_New" />
+   <addaction name="action_Open" />
+   <addaction name="action_Save" />
+   <addaction name="separator" />
+   <addaction name="action_Update_all" />
+   <addaction name="action_Release" />
+  </widget>
+  <widget class="QToolBar" name="tlb_translation" >
+   <property name="geometry" >
+    <rect>
+     <x>297</x>
+     <y>22</y>
+     <width>551</width>
+     <height>62</height>
+    </rect>
+   </property>
+   <property name="windowTitle" >
+    <string>toolBar_2</string>
+   </property>
+   <property name="toolButtonStyle" >
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_Previous_unfinished" />
+   <addaction name="action_Next_unfinished" />
+   <addaction name="action_Previous" />
+   <addaction name="action_Next" />
+   <addaction name="action_Done_and_next" />
+  </widget>
+  <action name="action_New" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/filenew.png</normaloff>:/images/images/filenew.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;New</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action_Open" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Open</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_Save" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/filesave.png</normaloff>:/images/images/filesave.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="action_Quit" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/quit.png</normaloff>:/images/images/quit.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_Add" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/add.png</normaloff>:/images/images/add.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Add</string>
+   </property>
+  </action>
+  <action name="action_Remove" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/remove.png</normaloff>:/images/images/remove.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Remo&amp;ve</string>
+   </property>
+  </action>
+  <action name="action_Previous_unfinished" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/previous_unfinished.png</normaloff>:/images/images/previous_unfinished.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Previous unfinished</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+K</string>
+   </property>
+  </action>
+  <action name="action_Next_unfinished" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/next_unfinished.png</normaloff>:/images/images/next_unfinished.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Next unfinished</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="action_Previous" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/previous.png</normaloff>:/images/images/previous.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Previous</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+K</string>
+   </property>
+  </action>
+  <action name="action_Next" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/next.png</normaloff>:/images/images/next.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Next</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+L</string>
+   </property>
+  </action>
+  <action name="action_Done_and_next" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/done.png</normaloff>:/images/images/done.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Done and next</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Return</string>
+   </property>
+  </action>
+  <action name="action_Close" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/fileclose.png</normaloff>:/images/images/fileclose.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Close</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="action_Update_all" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/update.png</normaloff>:/images/images/update.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Update all</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="action_Add_other_language" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/add.png</normaloff>:/images/images/add.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Other</string>
+   </property>
+  </action>
+  <action name="action_Remove_all_languages" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/remove.png</normaloff>:/images/images/remove.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Remove all</string>
+   </property>
+  </action>
+  <action name="action_Release" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/release.png</normaloff>:/images/images/release.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Release</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="action_Check_for_updates" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/software_update.png</normaloff>:/images/images/software_update.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Check for updates</string>
+   </property>
+  </action>
+  <action name="action_About_Weblinguist" >
+   <property name="icon" >
+    <iconset resource="resources.qrc" >
+     <normaloff>:/images/images/help_about.png</normaloff>:/images/images/help_about.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;About Weblinguist</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="9" />
+ <customwidgets>
+  <customwidget>
+   <class>ExtendedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>extendedlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MTListWidget</class>
+   <extends>QListWidget</extends>
+   <header>mtlistwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MTTableWidget</class>
+   <extends>QTableWidget</extends>
+   <header>mttablewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="resources.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>action_Quit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
