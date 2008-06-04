@@ -1,0 +1,28 @@
+<RCC>
+  <qresource prefix="images" >
+    <file>images/software_update.png</file>
+    <file>images/help_about.png</file>
+    <file>images/qt4.png</file>
+    <file>images/release.png</file>
+    <file>images/done16.png</file>
+    <file>images/unfinished16.png</file>
+    <file>images/lang_add.png</file>
+    <file>images/lang_remove.png</file>
+    <file>images/update.png</file>
+    <file>images/fileclose.png</file>
+    <file>images/quit.png</file>
+    <file>images/clear.png</file>
+    <file>images/clear_rtl.png</file>
+    <file>images/add.png</file>
+    <file>images/done.png</file>
+    <file>images/filenew.png</file>
+    <file>images/fileopen.png</file>
+    <file>images/filesave.png</file>
+    <file>images/next.png</file>
+    <file>images/next_unfinished.png</file>
+    <file>images/previous.png</file>
+    <file>images/previous_unfinished.png</file>
+    <file>images/remove.png</file>
+    <file>images/weblinguist128.png</file>
+  </qresource>
+</RCC>
