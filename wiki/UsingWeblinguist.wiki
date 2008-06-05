@@ -55,7 +55,7 @@ File {{{index.html}}}:
     <a external href="index.html">This page in English</a><br />
     <a external href="index.html?lang=Slovak">This page in Slovak</a><br />
     <a external href="index.html?lang=French">This page in French</a><br />
-    <a href="another_page.html">Another page</a><br />
+    <a href="another_page.html"><i18n>Another page</i18n></a><br />
     <a external href="http://code.google.com">Google Code</a>
 </body>
 </html>
