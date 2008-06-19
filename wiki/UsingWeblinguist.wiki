@@ -25,7 +25,7 @@ Say we have a page called index.html, which has several translations (Slovak and
 
 There are two more minor modifications we need to make to each web page. First, we need to add this line:
 
-{{{<script type="text/javascript" src="page_name.i18n.js"></script>}}}
+{{{<script type="text/javascript" src="page_name.i18n.js" />}}}
 
 into the *head* section of the HTML. Replace page_name with the file name of the page (in case of index.html, it is index).
 
