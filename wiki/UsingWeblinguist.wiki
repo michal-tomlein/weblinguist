@@ -47,7 +47,7 @@ File {{{index.html}}}:
 {{{
 <html>
 <head>
-    <script type="text/javascript" src="index.i18n.js"></script>
+    <script type="text/javascript" src="index.i18n.js" />
 </head>
 <body onLoad="onLoad();">
     <i18n>A string to translate.</i18n><br />
