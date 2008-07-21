@@ -61,7 +61,7 @@ File {{{index.html}}}:
     <a external href="index.html?lang=French">This page in French</a><br />
     <a href="another_page.html"><i18n>Another page</i18n></a><br />
     <a external href="http://code.google.com"><i18n>Google Code</i18n></a><br />
-<i18n>Have a look at the <a external="" href="http://code.google.com">Google Code</a> site.</i18n>
+    <i18n>Have a look at the <a external="" href="http://code.google.com">Google Code</a> site.</i18n>
 </body>
 </html>
 }}}
