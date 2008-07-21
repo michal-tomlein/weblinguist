@@ -13,7 +13,11 @@ If you have any external links pointing to pages which will not be translated, y
 
 {{{<a href="index.html">Home page</a>}}}
 
-{{{<a external href="http://code.google.com">Google Code</a>}}}
+{{{<a external href="http://code.google.com"><i18n>Google Code</i18n></a>}}}
+
+If you need to translate links or if they appear in the middle of a sentence within the *i18n* tag, use *external=""* instead of just *external*. If you find this confusing, always use *external=""* to prevent errors.
+
+{{{<i18n>Have a look at the <a external="" href="http://code.google.com">Google Code</a> site.</i18n>}}}
 
 This is required because Weblinguist will automatically add "{{{?lang=SomeLanguage}}}" or "{{{&lang=SomeLanguage}}}" to the *href* attribute of each internal (i.e. not containing the attribute *external*) link, so that the appropriate language version is loaded when the user clicks on a link.
 
@@ -25,7 +29,7 @@ Say we have a page called index.html, which has several translations (Slovak and
 
 There are two more minor modifications we need to make to each web page. First, we need to add this line:
 
-{{{<script type="text/javascript" src="page_name.i18n.js" />}}}
+{{{<script type="text/javascript" src="page_name.i18n.js"></script>}}}
 
 into the *head* section of the HTML. Replace page_name with the file name of the page (in case of index.html, it is index).
 
@@ -47,7 +51,7 @@ File {{{index.html}}}:
 {{{
 <html>
 <head>
-    <script type="text/javascript" src="index.i18n.js" />
+    <script type="text/javascript" src="index.i18n.js"></script>
 </head>
 <body onLoad="onLoad();">
     <i18n>A string to translate.</i18n><br />
@@ -56,7 +60,8 @@ File {{{index.html}}}:
     <a external href="index.html?lang=Slovak">This page in Slovak</a><br />
     <a external href="index.html?lang=French">This page in French</a><br />
     <a href="another_page.html"><i18n>Another page</i18n></a><br />
-    <a external href="http://code.google.com">Google Code</a>
+    <a external href="http://code.google.com"><i18n>Google Code</i18n></a><br />
+<i18n>Have a look at the <a external="" href="http://code.google.com">Google Code</a> site.</i18n>
 </body>
 </html>
 }}}
