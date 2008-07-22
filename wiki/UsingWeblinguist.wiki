@@ -54,13 +54,13 @@ File {{{index.html}}}:
     <script type="text/javascript" src="index.i18n.js"></script>
 </head>
 <body onLoad="onLoad();">
-    <i18n>A string to translate.</i18n><br />
-    <i18n>Another string to <em>translate</em>.</i18n><br />
-    <a external href="index.html">This page in English</a><br />
-    <a external href="index.html?lang=Slovak">This page in Slovak</a><br />
-    <a external href="index.html?lang=French">This page in French</a><br />
-    <a href="another_page.html"><i18n>Another page</i18n></a><br />
-    <a external href="http://code.google.com"><i18n>Google Code</i18n></a><br />
+    <i18n>A string to translate.</i18n><br>
+    <i18n>Another string to <em>translate</em>.</i18n><br>
+    <a external href="index.html">This page in English</a><br>
+    <a external href="index.html?lang=Slovak">This page in Slovak</a><br>
+    <a external href="index.html?lang=French">This page in French</a><br>
+    <a href="another_page.html"><i18n>Another page</i18n></a><br>
+    <a external href="http://code.google.com"><i18n>Google Code</i18n></a><br>
     <i18n>Have a look at the <a external="" href="http://code.google.com">Google Code</a> site.</i18n>
 </body>
 </html>
