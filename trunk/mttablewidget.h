@@ -33,6 +33,7 @@ class MTTableWidget : public QTableWidget
 public:
     MTTableWidget(QWidget * parent = 0):
     QTableWidget(parent) {
+        highlighted_row = -1;
         QObject::connect(this, SIGNAL(currentItemChanged(QTableWidgetItem *, QTableWidgetItem *)), this, SLOT(emitCurrentIndexAvailabilityChanged()));
     };
 
@@ -56,11 +57,13 @@ public slots:
     };
     void highlightItem(QTableWidgetItem * item) { highlightRow(row(item)); };
     void highlightRow(int i) {
-        for (int r = 0; r < rowCount(); ++r) {
+        if (highlighted_row >= 0) {
             for (int c = 0; c < columnCount(); ++c) {
-                item(r, c)->setBackground(Qt::NoBrush);
+                item(highlighted_row, c)->setBackground(Qt::NoBrush);
             }
         }
+        highlighted_row = i;
+        if (highlighted_row < 0) { return; }
         for (int c = 0; c < columnCount(); ++c) {
             item(i, c)->setBackground(QBrush::QBrush(QColor::QColor(197, 255, 120)));
         }
@@ -72,12 +75,7 @@ public slots:
         if (item == NULL) { return false; }
         return (item->background() == QBrush::QBrush(QColor::QColor(197, 255, 120)));
     };
-    int highlightedRow() {
-        for (int i = 0; i < rowCount(); ++i) {
-            if (isRowHighlighted(i)) { return i; }
-        }
-        return -1;
-    };
+    int highlightedRow() { return highlighted_row; };
 
 private slots:
     void emitCurrentIndexAvailabilityChanged() {
@@ -95,6 +93,7 @@ private:
         }
         return contains;
     };
+    int highlighted_row;
     SearchLineEditPalettes searchLineEditPalettes;
 };
 

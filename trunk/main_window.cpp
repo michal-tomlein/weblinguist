@@ -21,8 +21,8 @@
 
 MainWindow::MainWindow()
 {
-    weblinguist_version = "0.1.0";
-    f_weblinguist_version = 0.1;
+    weblinguist_version = "0.1.1";
+    f_weblinguist_version = 0.11;
     setupUi(this);
     http = new QHttp(this);
 	http_buffer = new QBuffer(this);
@@ -325,24 +325,16 @@ void MainWindow::loadFile(const QDomElement & element)
         sources = strings.at(i).toElement().elementsByTagName("source");
         translations = strings.at(i).toElement().elementsByTagName("translation");
         obsolete = strings.at(i).toElement().attribute("obsolete", "false") == "true";
-        item = new QTableWidgetItem(sources.count() < 1 ? QString() : sources.at(0).toElement().text());
+        item = new QTableWidgetItem(sources.count() < 1 ? QString() : sources.at(0).toElement().text().left(64));
         if (obsolete) { item->setForeground(QBrush::QBrush(QColor::QColor(128, 128, 128))); }
         tw_strings->setItem(i, 0, item);
-        found = false;
+        found = false; item = NULL;
         if (!hide_translation) {
             for (int t = 0; t < translations.count(); ++t) {
                 translation = translations.at(t).toElement();
                 if (translation.attribute("lang") != lang_name) { continue; }
                 found = true;
-                item = new QTableWidgetItem(translation.text());
-                if (translation.attribute("unfinished", "false") == "true") {
-                    item->setData(Qt::UserRole, "unfinished;");
-                    item->setIcon(QIcon(QString::fromUtf8(":/images/images/unfinished16.png")));
-                } else {
-                    item->setIcon(QIcon(QString::fromUtf8(":/images/images/done16.png")));
-                }
-                if (obsolete) { item->setForeground(QBrush::QBrush(QColor::QColor(128, 128, 128))); }
-                tw_strings->setItem(i, 1, item);
+                item = updateTranslationItem(translation, new QTableWidgetItem, i);
                 break;
             }
         }
@@ -350,13 +342,27 @@ void MainWindow::loadFile(const QDomElement & element)
             item = new QTableWidgetItem;
             item->setData(Qt::UserRole, "unfinished;");
             item->setIcon(QIcon(QString::fromUtf8(":/images/images/unfinished16.png")));
-            if (obsolete) { item->setForeground(QBrush::QBrush(QColor::QColor(128, 128, 128))); }
             tw_strings->setItem(i, 1, item);
         }
+        if (obsolete && item) { item->setForeground(QBrush::QBrush(QColor::QColor(128, 128, 128))); }
     }
     txb_source->clear();
     pte_translation->clear();
     gb_translation->setEnabled(false);
+}
+
+QTableWidgetItem * MainWindow::updateTranslationItem(const QDomElement & translation, QTableWidgetItem * item, int row)
+{
+    if (!item) { return NULL; }
+    item->setText(translation.text().left(64));
+    if (translation.attribute("unfinished", "false") == "true") {
+        item->setData(Qt::UserRole, "unfinished;");
+        item->setIcon(QIcon(QString::fromUtf8(":/images/images/unfinished16.png")));
+    } else {
+        item->setIcon(QIcon(QString::fromUtf8(":/images/images/done16.png")));
+    }
+    if (row >= 0) { tw_strings->setItem(row, 1, item); }
+    return item;
 }
 
 void MainWindow::loadString(QTableWidgetItem * item)
@@ -423,6 +429,7 @@ void MainWindow::saveString(bool done)
                     while (translation.hasChildNodes()) { translation.removeChild(translation.firstChild()); }
                     QDomText translation_text = project.createTextNode(pte_translation->toPlainText());
                     translation.appendChild(translation_text);
+                    updateTranslationItem(translation, tw_strings->item(r, 1));
                     modified = true;
                 }
                 if (done && translation.hasAttribute("unfinished"))
@@ -444,17 +451,39 @@ void MainWindow::updateAll()
     QString begin_tag = "<i18n>"; QString end_tag = "</i18n>";
     QDomNodeList files = project.documentElement().elementsByTagName("file");
     QDir project_dir = QFileInfo(project_path).dir();
-    QString line; QString i18n; int c = 0; int skip = 0;
+    QString line; QString line_s; QString i18n;
+    int c = 0; int skip = 0;
     int begin = 0; int end = 0;
-    QStringList i18n_list; QDomNodeList strings;
+    QStringList i18n_list; QStringList ssi_list;
+    QDomNodeList strings; QDomElement string;
     QDomNodeList sources; QString source;
     for (int i = 0; i < files.count(); ++i) {
         QFile file(project_dir.absoluteFilePath(files.at(i).toElement().attribute("path")));
         if (!file.open(QFile::ReadOnly | QFile::Text)) { continue; }
         QTextStream s(&file); s.setCodec(QTextCodec::codecForName(le_encoding->text().toUtf8()));
-        i18n_list.clear(); i18n.clear();
+        i18n_list.clear(); i18n.clear(); ssi_list.clear();
         while (!s.atEnd()) {
-            line = s.readLine(); skip = 0;
+            line = s.readLine(); line_s = line.simplified();
+            if (line_s.startsWith("<!--#include")) {
+                if ((c = line_s.indexOf("file")) > 0) {
+                    int b = line_s.indexOf("\"", c);
+                    if (b > 0) {
+                        int e = line_s.indexOf("\"", b + 1);
+                        if (e > 0) {
+                            ssi_list << line_s.mid(b + 1, e - b - 1);
+                        }
+                    }
+                } else if ((c = line_s.indexOf("virtual")) > 0) {
+                    int b = line_s.indexOf("\"", c);
+                    if (b > 0) {
+                        int e = line_s.indexOf("\"", b + 1);
+                        if (e > 0) {
+                            ssi_list << project_dir.relativeFilePath(QFileInfo(file.fileName()).dir().absoluteFilePath(line_s.mid(b + 1, e - b - 1)));
+                        }
+                    }
+                }
+            }
+            skip = 0;
             c = line.count(begin_tag, Qt::CaseInsensitive) + (end == -1 ? 1 : 0);
             for (int n = 0; n < c; ++n) {
                 if (end == -1) { begin = 0; }
@@ -466,20 +495,26 @@ void MainWindow::updateAll()
                 i18n.append(line.mid(begin, (end < 0) ? end : (end - begin)));
                 if (end != -1) {
                     skip = end + 1;
-                    i18n_list << i18n; i18n.clear();
+                    if (!i18n_list.contains(i18n, Qt::CaseSensitive)) { i18n_list << i18n; }
+                    i18n.clear();
                 }
             }
         }
+        files.at(i).toElement().setAttribute("includes", ssi_list.join(";"));
         strings = files.at(i).toElement().elementsByTagName("string");
         for (int s = 0; s < strings.count(); ++s) {
-            sources = strings.at(s).toElement().elementsByTagName("source");
+            string = strings.at(s).toElement();
+            sources = string.elementsByTagName("source");
             if (sources.count() < 1) { continue; }
             source = sources.at(0).toElement().text();
             if (i18n_list.contains(source)) {
                 i18n_list.removeAll(source);
-                strings.at(s).toElement().removeAttribute("obsolete");
+                string.removeAttribute("obsolete");
+            } else if (string.elementsByTagName("translation").isEmpty()) {
+                files.at(i).toElement().removeChild(string);
+                --s;
             } else {
-                strings.at(s).toElement().setAttribute("obsolete", "true");
+                string.setAttribute("obsolete", "true");
             }
         }
         for (int s = 0; s < i18n_list.count(); ++s) {
@@ -542,6 +577,52 @@ QString escapeDoubleQuotes(const QString & s)
     return r;
 }
 
+void writeI18nJavaScriptToStream(QTextStream * s)
+{
+    *s << "function Dictionary(startValues) {" << endl;
+    *s << "    this.values = startValues || {};" << endl;
+    *s << "}" << endl;
+    *s << "Dictionary.prototype.add = function(name, value) {" << endl;
+    *s << "    this.values[name] = value;" << endl;
+    *s << "};" << endl;
+    *s << "Dictionary.prototype.value = function(name) {" << endl;
+    *s << "    return this.values[name];" << endl;
+    *s << "};" << endl;
+    *s << "Dictionary.prototype.contains = function(name) {" << endl;
+    *s << "    return Object.prototype.hasOwnProperty.call(this.values, name) &&" << endl;
+    *s << "        Object.prototype.propertyIsEnumerable.call(this.values, name);" << endl;
+    *s << "};" << endl;
+    *s << "Dictionary.prototype.each = function(action) {" << endl;
+    *s << "    forEachIn(this.values, action);" << endl;
+    *s << "};" << endl;
+    *s << "function getUrlParameter(name) {" << endl;
+    *s << "    name = name.replace(/[\\[]/, \"\\\\\\[\").replace(/[\\]]/, \"\\\\\\]\");" << endl;
+    *s << "    var regexS = \"[\\\\?&]\" + name + \"=([^&#]*)\";" << endl;
+    *s << "    var regex = new RegExp(regexS);" << endl;
+    *s << "    var results = regex.exec(window.location.href);" << endl;
+    *s << "    if (results == null) return \"\"; else return results[1];" << endl;
+    *s << "}" << endl;
+    *s << "function onLoad() {" << endl;
+    *s << "    translate(getUrlParameter(\"lang\"));" << endl;
+    *s << "}" << endl;
+    *s << "function translate(l) {" << endl;
+    *s << "    var lang = l.toLowerCase();" << endl;
+    *s << "    var elements = document.getElementsByTagName(\"i18n\");" << endl;
+    *s << "    for (var i = 0; i < elements.length; i++) {" << endl;
+    *s << "        if (langs.value(lang).contains(elements[i].innerHTML))" << endl;
+    *s << "            elements[i].innerHTML = langs.value(lang).value(elements[i].innerHTML);" << endl;
+    *s << "    }" << endl;
+    *s << "    var links = document.getElementsByTagName(\"a\");" << endl;
+    *s << "    for (var i = 0; i < links.length; i++) {" << endl;
+    *s << "        if (links[i].hasAttribute(\"external\")) { continue; }" << endl;
+    *s << "        if (!links[i].hasAttribute(\"href\")) { continue; }" << endl;
+    *s << "        var href = links[i].getAttribute(\"href\");" << endl;
+    *s << "        if (href.indexOf(\"?\") == -1) { links[i].setAttribute(\"href\", href + \"?lang=\" + lang); }" << endl;
+    *s << "        else { links[i].setAttribute(\"href\", href + \"&lang=\" + lang); }" << endl;
+    *s << "    }" << endl;
+    *s << "}" << endl << endl;
+}
+
 void MainWindow::release()
 {
     if (!project_open) { return; }
@@ -556,59 +637,24 @@ void MainWindow::release()
         list_languages << languages.at(i).toElement().attribute("name");
     }
     QDomNodeList strings, sources, translations; QDomElement translation; bool found = false;
+    QMap<QString, QMap<QString, QMap<QString, QString> *> *> map_translations_files;
+    QMap<QString, QMap<QString, QString> *> * map_translations_langs;
+    QMap<QString, QString> * map_translations_strings;
+    QMap<QString, QMap<QString, QString> *> all_translations;
+    QMap<QString, QString> * all_translations_strings;
+    QMap<QString, QString> map_ssi;
+    for (int l = 0; l < list_languages.count(); ++l) {
+        all_translations.insert(list_languages.at(l), new QMap<QString, QString>);
+    }
     for (int f = 0; f < files.count(); ++f) {
-        path = project_dir.absoluteFilePath(files.at(f).toElement().attribute("path"));
-        i_last_dot = path.lastIndexOf("."); i_last_slash = path.lastIndexOf("/");
-        if (i_last_slash < i_last_dot && i_last_dot != -1) { path.truncate(i_last_dot); }
-        path.append(".i18n.js");
-        QFile file(path);
-        if (!file.open(QFile::WriteOnly | QFile::Text)) { continue; }
-        QTextStream s(&file); s.setCodec(QTextCodec::codecForName(le_encoding->text().toUtf8()));
-        s << "function Dictionary(startValues) {" << endl;
-        s << "    this.values = startValues || {};" << endl;
-        s << "}" << endl;
-        s << "Dictionary.prototype.add = function(name, value) {" << endl;
-        s << "    this.values[name] = value;" << endl;
-        s << "};" << endl;
-        s << "Dictionary.prototype.value = function(name) {" << endl;
-        s << "    return this.values[name];" << endl;
-        s << "};" << endl;
-        s << "Dictionary.prototype.contains = function(name) {" << endl;
-        s << "    return Object.prototype.hasOwnProperty.call(this.values, name) &&" << endl;
-        s << "        Object.prototype.propertyIsEnumerable.call(this.values, name);" << endl;
-        s << "};" << endl;
-        s << "Dictionary.prototype.each = function(action) {" << endl;
-        s << "    forEachIn(this.values, action);" << endl;
-        s << "};" << endl;
-        s << "function getUrlParameter(name) {" << endl;
-        s << "    name = name.replace(/[\\[]/, \"\\\\\\[\").replace(/[\\]]/, \"\\\\\\]\");" << endl;
-        s << "    var regexS = \"[\\\\?&]\" + name + \"=([^&#]*)\";" << endl;
-        s << "    var regex = new RegExp(regexS);" << endl;
-        s << "    var results = regex.exec(window.location.href);" << endl;
-        s << "    if (results == null) return ""; else return results[1];" << endl;
-        s << "}" << endl;
-        s << "function onLoad() {" << endl;
-        s << "    translate(getUrlParameter(\"lang\"));" << endl;
-        s << "}" << endl;
-        s << "function translate(l) {" << endl;
-        s << "    var lang = l.toLowerCase();" << endl;
-        s << "    var elements = document.getElementsByTagName(\"i18n\");" << endl;
-        s << "    for (var i = 0; i < elements.length; i++) {" << endl;
-        s << "        if (langs.value(lang).contains(elements[i].innerHTML))" << endl;
-        s << "            elements[i].innerHTML = langs.value(lang).value(elements[i].innerHTML);" << endl;
-        s << "    }" << endl;
-        s << "    var links = document.getElementsByTagName(\"a\");" << endl;
-        s << "    for (var i = 0; i < links.length; i++) {" << endl;
-        s << "        if (links[i].hasAttribute(\"external\")) { continue; }" << endl;
-        s << "        if (!links[i].hasAttribute(\"href\")) { continue; }" << endl;
-        s << "        var href = links[i].getAttribute(\"href\");" << endl;
-        s << "        if (href.indexOf(\"?\") == -1) { links[i].setAttribute(\"href\", href + \"?lang=\" + lang); }" << endl;
-        s << "        else { links[i].setAttribute(\"href\", href + \"&lang=\" + lang); }" << endl;
-        s << "    }" << endl;
-        s << "}" << endl << endl;
+        map_translations_langs = new QMap<QString, QMap<QString, QString> *>;
+        map_translations_files.insert(files.at(f).toElement().attribute("path"), map_translations_langs);
+        map_ssi.insert(files.at(f).toElement().attribute("path"), files.at(f).toElement().attribute("includes"));
         strings = files.at(f).toElement().elementsByTagName("string");
         for (int l = 0; l < list_languages.count(); ++l) {
-            s << QString("var dict_%1 = new Dictionary();").arg(list_languages.at(l)) << endl;
+            map_translations_strings = new QMap<QString, QString>;
+            map_translations_langs->insert(list_languages.at(l), map_translations_strings);
+            all_translations_strings = all_translations.value(list_languages.at(l));
             for (int i = 0; i < strings.count(); ++i) {
                 sources = strings.at(i).toElement().elementsByTagName("source");
                 translations = strings.at(i).toElement().elementsByTagName("translation");
@@ -621,10 +667,34 @@ void MainWindow::release()
                     break;
                 }
                 if (found) {
-                    s << QString("dict_%1.add(\"%2\", \"%3\");").arg(list_languages.at(l)).arg(escapeDoubleQuotes(sources.at(0).toElement().text())).arg(escapeDoubleQuotes(translation.text())) << endl;
-                } else {
-                    s << QString("dict_%1.add(\"%2\", \"%2\");").arg(list_languages.at(l)).arg(escapeDoubleQuotes(sources.at(0).toElement().text())) << endl;
+                    map_translations_strings->insert(sources.at(0).toElement().text(), translation.text());
+                    all_translations_strings->insert(sources.at(0).toElement().text(), translation.text());
                 }
+            }
+        }
+    }
+    QStringList ssi_list; QMap<QString, QString> map_strings;
+    QMapIterator<QString, QMap<QString, QMap<QString, QString> *> *> iterator_files(map_translations_files);
+    while (iterator_files.hasNext()) { iterator_files.next();
+        path = project_dir.absoluteFilePath(iterator_files.key());
+        i_last_dot = path.lastIndexOf("."); i_last_slash = path.lastIndexOf("/");
+        if (i_last_slash < i_last_dot && i_last_dot != -1) { path.truncate(i_last_dot); }
+        path.append(".i18n.js");
+        QFile file(path);
+        if (!file.open(QFile::WriteOnly | QFile::Text)) { continue; }
+        QTextStream s(&file); s.setCodec(QTextCodec::codecForName(le_encoding->text().toUtf8()));
+        writeI18nJavaScriptToStream(&s);
+        ssi_list = map_ssi.value(iterator_files.key()).split(";");
+        for (int l = 0; l < list_languages.count(); ++l) {
+            s << QString("var dict_%1 = new Dictionary();").arg(list_languages.at(l)) << endl;
+            map_translations_strings = iterator_files.value()->value(list_languages.at(l));
+            map_strings = *map_translations_strings;
+            for (int i = 0; i < ssi_list.count(); ++i) {
+                map_strings.unite(*map_translations_files.value(ssi_list.at(i), new QMap<QString, QMap<QString, QString> *>)->value(list_languages.at(l), new QMap<QString, QString>));
+            }
+            QMapIterator<QString, QString> iterator(map_strings);
+            while (iterator.hasNext()) { iterator.next();
+                s << QString("dict_%1.add(\"%2\", \"%3\");").arg(list_languages.at(l)).arg(escapeDoubleQuotes(iterator.key())).arg(escapeDoubleQuotes(iterator.value())) << endl;
             }
             s << endl;
         }
@@ -634,13 +704,43 @@ void MainWindow::release()
         }
         file.close();
     }
+    iterator_files.toFront();
+    while (iterator_files.hasNext()) { iterator_files.next();
+        for (int l = 0; l < list_languages.count(); ++l) {
+            delete iterator_files.value()->value(list_languages.at(l));
+        }
+        delete iterator_files.value();
+    }
+    { // i18n.js
+        path = project_dir.absoluteFilePath("i18n.js");
+        QFile file(path);
+        if (!file.open(QFile::WriteOnly | QFile::Text)) { return; }
+        QTextStream s(&file); s.setCodec(QTextCodec::codecForName(le_encoding->text().toUtf8()));
+        writeI18nJavaScriptToStream(&s);
+        for (int l = 0; l < list_languages.count(); ++l) {
+            s << QString("var dict_%1 = new Dictionary();").arg(list_languages.at(l)) << endl;
+            all_translations_strings = all_translations.value(list_languages.at(l));
+            QMapIterator<QString, QString> iterator(*all_translations_strings);
+            while (iterator.hasNext()) { iterator.next();
+                s << QString("dict_%1.add(\"%2\", \"%3\");").arg(list_languages.at(l)).arg(escapeDoubleQuotes(iterator.key())).arg(escapeDoubleQuotes(iterator.value())) << endl;
+            }
+            s << endl;
+            all_translations.remove(list_languages.at(l));
+            delete all_translations_strings;
+        }
+        s << "var langs = new Dictionary();" << endl;
+        for (int l = 0; l < list_languages.count(); ++l) {
+            s << QString("langs.add(\"%1\", dict_%2);").arg(list_languages.at(l).toLower()).arg(list_languages.at(l)) << endl;
+        }
+        file.close();
+    } // i18n.js
 }
 
 void MainWindow::previousUnfinished()
 {
     saveString(false);
     int r = tw_strings->highlightedRow();
-    loadHighlightedFile();
+    //loadHighlightedFile();
     if (r < 0) { r = tw_strings->rowCount(); }
     bool found = false;
     for (int i = r - 1; i >= 0 && !found; --i) {
@@ -656,7 +756,7 @@ void MainWindow::nextUnfinished()
 {
     saveString(false);
     int r = tw_strings->highlightedRow();
-    loadHighlightedFile();
+    //loadHighlightedFile();
     if (r < 0) { r = -1; }
     bool found = false;
     for (int i = r + 1; i < tw_strings->rowCount() && !found; ++i) {
@@ -672,7 +772,7 @@ void MainWindow::previous()
 {
     saveString(false);
     int r = tw_strings->highlightedRow();
-    loadHighlightedFile();
+    //loadHighlightedFile();
     if (r < 0) { r = tw_strings->rowCount() - 1; }
     else if (r == 0) { r = tw_strings->rowCount() - 1; } else { r--; }
     loadString(r);
@@ -682,7 +782,7 @@ void MainWindow::next()
 {
     saveString(false);
     int r = tw_strings->highlightedRow();
-    loadHighlightedFile();
+    //loadHighlightedFile();
     if (r < 0) { r = 0; }
     else if (r >= tw_strings->rowCount() - 1) { r = 0; } else { r++; }
     loadString(r);
@@ -692,7 +792,7 @@ void MainWindow::doneAndNext()
 {
     saveString(true);
     int r = tw_strings->highlightedRow();
-    loadHighlightedFile();
+    //loadHighlightedFile();
     if (r < 0) { r = -1; }
     bool found = false;
     for (int i = r + 1; i < tw_strings->rowCount() && !found; ++i) {

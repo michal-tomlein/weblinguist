@@ -74,6 +74,7 @@ private:
     void openProject(QString);
     void saveProject(QString);
     void loadFile(const QDomElement &);
+    QTableWidgetItem * updateTranslationItem(const QDomElement &, QTableWidgetItem *, int = -1);
     void clearAll();
     void setAllEnabled(bool);
     void closeEvent(QCloseEvent *);

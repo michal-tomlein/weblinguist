@@ -14,14 +14,6 @@
    <string>Weblinguist</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>84</y>
-     <width>848</width>
-     <height>577</height>
-    </rect>
-   </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3" >
     <property name="spacing" >
      <number>0</number>
@@ -35,14 +27,6 @@
        <number>0</number>
       </property>
       <widget class="QWidget" name="page_welcome" >
-       <property name="geometry" >
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>848</width>
-         <height>577</height>
-        </rect>
-       </property>
        <layout class="QGridLayout" name="gridLayout_3" >
         <item row="0" column="1" >
          <spacer name="verticalSpacer_2" >
@@ -174,14 +158,6 @@
        </layout>
       </widget>
       <widget class="QWidget" name="page_main" >
-       <property name="geometry" >
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>848</width>
-         <height>555</height>
-        </rect>
-       </property>
        <layout class="QGridLayout" name="gridLayout" >
         <item row="0" column="0" colspan="2" >
          <widget class="QGroupBox" name="gb_lang" >
@@ -502,14 +478,6 @@
    <addaction name="menuHelp" />
   </widget>
   <widget class="QToolBar" name="tlb_main" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>22</y>
-     <width>297</width>
-     <height>62</height>
-    </rect>
-   </property>
    <property name="windowTitle" >
     <string>toolBar</string>
    </property>
@@ -530,14 +498,6 @@
    <addaction name="action_Release" />
   </widget>
   <widget class="QToolBar" name="tlb_translation" >
-   <property name="geometry" >
-    <rect>
-     <x>297</x>
-     <y>22</y>
-     <width>551</width>
-     <height>62</height>
-    </rect>
-   </property>
    <property name="windowTitle" >
     <string>toolBar_2</string>
    </property>
@@ -602,6 +562,9 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+Q</string>
+   </property>
+   <property name="menuRole" >
+    <enum>QAction::QuitRole</enum>
    </property>
   </action>
   <action name="action_Add" >
@@ -755,6 +718,9 @@
    </property>
    <property name="text" >
     <string>&amp;About Weblinguist</string>
+   </property>
+   <property name="menuRole" >
+    <enum>QAction::AboutRole</enum>
    </property>
   </action>
  </widget>
